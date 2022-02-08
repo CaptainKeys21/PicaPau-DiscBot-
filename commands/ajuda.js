@@ -3,11 +3,11 @@ const { MessageEmbed } = require('discord.js');
 const { version } = require('../package.json');
 
 const ajudaEmbed = new MessageEmbed()
-    .setColor('RED')
+    .setColor('RANDOM')
     .setTitle('Pica-Pau Bot')
     .setDescription(`Versão ${version}`)
     .setThumbnail('https://pbs.twimg.com/profile_images/1466949546278367237/xW5u29Pi_400x400.jpg')
-    .addField('Comandos: ', 'Por enquanto só o Ajuda :v', true);
+    .addField('Comandos: ', '**Ajuda** - Mostra todos os comandos\n**Tocar** - toca musica na call', true);
 
 module.exports = {
     data: new SlashCommandBuilder()
