@@ -1,11 +1,13 @@
 const fs = require('fs');
 const { Client, Intents, Collection } = require('discord.js');
 const { token } = require('./config.json');
+const BotPlayer = require('./modules/botPlayer');
 
 const myIntents = new Intents().add(Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_VOICE_STATES);
 const client = new Client({ intents: myIntents });
 
 client.commands = new Collection();
+client.botPlayer = new BotPlayer();
 
 const commandFiles = fs.readdirSync('./commands').filter(file => file.endsWith('.js'));
 

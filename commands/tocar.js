@@ -1,18 +1,7 @@
 const { SlashCommandBuilder } = require('@discordjs/builders');
 const { MessageEmbed } = require('discord.js');
-const ytdl = require('ytdl-core');
-const {
-	AudioPlayerStatus,
-	StreamType,
-	createAudioPlayer,
-	createAudioResource,
-	joinVoiceChannel,
-} = require('@discordjs/voice');
 
-
-const errorEmbed = new MessageEmbed()
-    .setColor('RED')
-    .setTitle('Conecte-se a um canal de voz! :rage::rage::rage:');
+const errorEmbed = new MessageEmbed().setColor('RED').setTitle('Conecte-se a um canal de voz! :rage::rage::rage:');
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -22,27 +11,21 @@ module.exports = {
                 .setDescription('Qual é o som meu chapa')
                 .setRequired(true)),
     async execute(interaction) {
+            interaction.client.botPlayer.activeChannel = interaction.channel;
         try {
+            try {
+                if (!interaction.client.botPlayer.connection) interaction.client.botPlayer.createConnection(interaction);
+                if (!interaction.client.botPlayer.player) interaction.client.botPlayer.createPlayer();
+            } catch (error) {
+                return;
+            }
 
-            const connection = joinVoiceChannel({
-                channelId: interaction.member.voice.channel.id,
-                guildId: interaction.channel.guild.id,
-                adapterCreator: interaction.channel.guild.voiceAdapterCreator,
-            });
+            await interaction.client.botPlayer.addtoQueue(interaction, interaction.options.getString('musica'));
+            if (!interaction.client.botPlayer.isPlaying) await interaction.client.botPlayer.playMusic();
 
-            const stream = ytdl(interaction.options.getString('musica'), { filter: 'audioonly' });
-            const resource = createAudioResource(stream, { inputType: StreamType.Arbitrary });
-            const player = createAudioPlayer();
-
-            player.play(resource);
-            connection.subscribe(player);
-
-            player.on(AudioPlayerStatus.Idle, () => connection.destroy());
         } catch (error) {
             console.log(error);
-            await interaction.reply({ embeds: [errorEmbed], ephemeral: true });
-            return;
+            interaction.reply({ embeds: [errorEmbed] });
         }
-
     },
 };
