@@ -8,7 +8,6 @@ module.exports = class BotPlayer {
         this.connection;
         this.queue = [];
         this.player;
-        this.isPlaying = false;
         this.activeChannel;
     }
 
@@ -55,7 +54,6 @@ module.exports = class BotPlayer {
         const resource = createAudioResource(stream, { inputType: StreamType.Arbitrary });
         try {
             this.player.play(resource);
-            this.isPlaying = true;
             if (!this.connection.subscribe(this.player)) {
                 this.connection.subscribe(this.player);
             }
@@ -66,7 +64,6 @@ module.exports = class BotPlayer {
                 .setDescription(`${this.queue[index].title}`);
 
             this.activeChannel.send({ embeds: [embed] });
-
             this.queue.shift();
 
         } catch (error) {
@@ -88,6 +85,21 @@ module.exports = class BotPlayer {
 
     playerUnpause() {
         this.player.unpause();
+    }
+
+    stopPlayer() {
+        this.player.stop();
+    }
+
+    getQueueList() {
+        if (!this.queue.length) return 'Queue vazia :(';
+
+        let list = '';
+
+        for (let i = 0; i < this.queue.length; i++) {
+            list += `${i + 1} | **${this.queue[i].title}**(${this.queue[i].timestamp})\n`;
+        }
+        return list;
     }
 
 };

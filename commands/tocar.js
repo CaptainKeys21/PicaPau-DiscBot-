@@ -21,7 +21,7 @@ module.exports = {
             }
 
             await interaction.client.botPlayer.addtoQueue(interaction, interaction.options.getString('musica'));
-            if (!interaction.client.botPlayer.isPlaying) await interaction.client.botPlayer.playMusic();
+            if (interaction.client.botPlayer.player.state.status === 'idle') await interaction.client.botPlayer.playMusic();
 
         } catch (error) {
             console.log(error);

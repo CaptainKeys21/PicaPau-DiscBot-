@@ -2,15 +2,15 @@ const { SlashCommandBuilder } = require('@discordjs/builders');
 const { MessageEmbed } = require('discord.js');
 
 const embed = new MessageEmbed()
-    .setColor('DARK_BUT_NOT_BLACK')
-    .setTitle('Saindo...');
+    .setColor('ORANGE')
+    .setTitle('Pulando...');
 
 module.exports = {
     data: new SlashCommandBuilder()
-        .setName('sair')
-        .setDescription('saio da sua call'),
+        .setName('pular')
+        .setDescription('Pulo a musica atual'),
     async execute(interaction) {
-        await interaction.client.botPlayer.destroyConnection();
+        interaction.client.botPlayer.stopPlayer();
         interaction.reply({ embeds: [embed], ephemeral: true });
     },
 };

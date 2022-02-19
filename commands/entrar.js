@@ -1,4 +1,9 @@
 const { SlashCommandBuilder } = require('@discordjs/builders');
+const { MessageEmbed } = require('discord.js');
+
+const embed = new MessageEmbed()
+    .setColor('GREEN')
+    .setTitle('Entrando...');
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -6,6 +11,6 @@ module.exports = {
         .setDescription('invado a sua call'),
     async execute(interaction) {
         await interaction.client.botPlayer.createConnection(interaction);
-        interaction.reply({ content: 'Entrando...', ephemeral: true });
+        interaction.reply({ embeds: [embed], ephemeral: true });
     },
 };
