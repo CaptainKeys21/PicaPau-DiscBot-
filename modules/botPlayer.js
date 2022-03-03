@@ -97,9 +97,18 @@ module.exports = class BotPlayer {
         let list = '';
 
         for (let i = 0; i < this.queue.length; i++) {
-            list += `${i + 1} | **${this.queue[i].title}**(${this.queue[i].timestamp})\n`;
+            list += `${i + 1} | **${this.queue[i].title}** (${this.queue[i].timestamp})\n`;
         }
         return list;
+    }
+
+    removeMusicQueue(index) {
+        if (this.queue.length < index || !this.queue.length) return 'Musica não encontrada :(';
+
+        const name = this.queue[index].title;
+        this.queue.splice(index, 1);
+
+        return name;
     }
 
 };
